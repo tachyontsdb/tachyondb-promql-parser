@@ -500,6 +500,8 @@ pub struct AggregateExpr {
     #[cfg_attr(feature = "ser", serde(flatten))]
     #[cfg_attr(feature = "ser", serde(serialize_with = "serialize_grouping"))]
     pub modifier: Option<LabelModifier>,
+    /// The subperiod to aggregate over. Aggregates over the entire period if not specified.
+    pub subperiod: Option<Duration>,
 }
 
 impl AggregateExpr {
@@ -1159,6 +1161,10 @@ impl Expr {
                 let ms = Expr::MatrixSelector(MatrixSelector { vs, range });
                 Ok(ms)
             }
+            Expr::Aggregate(mut ae) => {
+                ae.subperiod = Some(range);
+                Ok(Expr::Aggregate(ae))
+            }
             _ => Err("ranges only allowed for vector selectors".into()),
         }
     }
@@ -1274,6 +1280,7 @@ impl Expr {
                 expr,
                 param,
                 modifier,
+                subperiod: None,
             })),
             None => Err(
                 "aggregate operation needs a single instant vector parameter, but found none"

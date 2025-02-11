@@ -1214,6 +1214,15 @@ mod tests {
                 let ex = Expr::from(VectorSelector::from("sum"));
                 Expr::new_aggregate_expr(token::T_SUM, None, FunctionArgs::new_args(ex))
             }),
+            ("sum(test)[5s]", {
+                let ex = Expr::from(VectorSelector::from("test"));
+                let mut ae =
+                    Expr::new_aggregate_expr(token::T_SUM, None, FunctionArgs::new_args(ex));
+                if let Ok(Expr::Aggregate(a)) = &mut ae {
+                    a.subperiod = Some(Duration::from_secs(5));
+                }
+                ae
+            }),
         ];
         assert_cases(Case::new_result_cases(cases));
 
@@ -1250,6 +1259,10 @@ mod tests {
             (
                 "rate(some_metric[5m]) @ 1234",
                 "@ modifier must be preceded by an vector selector or matrix selector or a subquery"
+            ),
+            (
+                "sum(test)[]",
+                "missing unit character in duration"
             ),
         ];
         assert_cases(Case::new_fail_cases(fail_cases));
