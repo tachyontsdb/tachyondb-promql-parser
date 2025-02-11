@@ -500,7 +500,7 @@ pub struct AggregateExpr {
     #[cfg_attr(feature = "ser", serde(flatten))]
     #[cfg_attr(feature = "ser", serde(serialize_with = "serialize_grouping"))]
     pub modifier: Option<LabelModifier>,
-    // The subperiod to aggregate over. Aggregates over the entire period if not specified.
+    /// The subperiod to aggregate over. Aggregates over the entire period if not specified.
     pub subperiod: Option<Duration>,
 }
 
