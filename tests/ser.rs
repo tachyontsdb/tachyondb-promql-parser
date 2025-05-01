@@ -458,8 +458,7 @@ fn test_serialize() {
                 "variadic": 0
             },
             "type": "call"
-
-    }
+        }
     );
 
     assert_json_ser_eq!("sum(rate(http_requests_total[5m]))",
@@ -489,6 +488,7 @@ fn test_serialize() {
         "grouping": [],
         "op": "sum",
         "param": null,
+        "subperiod": null,
         "type": "aggregation",
         "without": false
     });
@@ -520,6 +520,7 @@ fn test_serialize() {
         "grouping": ["host"],
         "op": "sum",
         "param": null,
+        "subperiod": null,
         "type": "aggregation",
         "without": false
     });
@@ -551,6 +552,7 @@ fn test_serialize() {
         "grouping": ["host"],
         "op": "sum",
         "param": null,
+        "subperiod": null,
         "type": "aggregation",
         "without": true
     });
